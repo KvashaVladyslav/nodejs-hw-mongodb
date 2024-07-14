@@ -2,15 +2,26 @@ import 'dotenv/config';
 import express from 'express';
 import initMongoConnection from './db/initMongoConnection.js';
 import { contactModel } from './models/contact.js';
+import cors from 'cors';
+import pino from 'pino-http';
 
 export default async function setupServer() {
   const app = express();
+
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      optionsSuccessStatus: 200,
+    }),
+  );
+
+  app.use(pino());
 
   app.get('/contacts', async (req, res) => {
     try {
       const contacts = await contactModel.find();
       if (contacts.length === 0) {
-        return res.status(404).send('Contact not found');
+        res.status(404).send('Contact not found');
       }
       res.send({
         status: 200,
@@ -27,8 +38,9 @@ export default async function setupServer() {
     try {
       const { contactsId } = req.params;
       const getContactById = await contactModel.findById(contactsId);
+      console.log(getContactById);
       if (getContactById === null) {
-        return res.status(404).send('Contact not found');
+        res.status(404).send('Contact not found');
       }
       res.send({
         status: 200,
@@ -39,6 +51,10 @@ export default async function setupServer() {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  });
+
+  app.use((req, res, next) => {
+    res.status(404).send({ message: 'Not found' });
   });
 
   try {
