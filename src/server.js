@@ -1,60 +1,19 @@
 import 'dotenv/config';
 import express from 'express';
-import { contactModel } from './models/contact.js';
 import cors from 'cors';
 import pino from 'pino-http';
+import router from './routers/contacts.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 export default async function setupServer() {
   const app = express();
 
-  app.use(
-    cors({
-      origin: 'http://localhost:3000',
-      optionsSuccessStatus: 200,
-    }),
-  );
-
+  app.use(router);
+  app.use(cors());
   app.use(pino());
-
-  app.get('/contacts', async (req, res) => {
-    try {
-      const contacts = await contactModel.find();
-      if (contacts.length === 0) {
-        res.status(404).send({ message: 'Contact not found' });
-      }
-      res.send({
-        status: 200,
-        message: 'Successfully found contacts!',
-        data: contacts,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Internal Server Error' });
-    }
-  });
-
-  app.get('/contacts/:contactsId', async (req, res) => {
-    try {
-      const { contactsId } = req.params;
-      const getContactById = await contactModel.findById(contactsId);
-      console.log(getContactById);
-      if (getContactById === null) {
-        res.status(404).send({ message: 'Contact not found' });
-      }
-      res.send({
-        status: 200,
-        message: `Successfully found contact with id ${contactsId}`,
-        data: getContactById,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Internal Server Error' });
-    }
-  });
-
-  app.use((req, res, next) => {
-    res.status(404).send({ message: 'Not found' });
-  });
+  app.use(notFoundHandler);
+  app.use(errorHandler);
 
   try {
     const PORT = Number(process.env.PORT) || 3000;

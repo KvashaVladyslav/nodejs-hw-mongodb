@@ -22,7 +22,6 @@ const contactSchema = new mongoose.Schema(
       type: String,
       enum: ['Work', 'Home', 'Personal'],
       required: true,
-      default: 'Personal',
     },
   },
   { timestamps: true },
