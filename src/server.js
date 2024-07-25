@@ -9,9 +9,9 @@ import { errorHandler } from './middlewares/errorHandler.js';
 export default async function setupServer() {
   const app = express();
 
-  app.use(router);
   app.use(cors());
   app.use(pino());
+  app.use(router);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
