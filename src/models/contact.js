@@ -20,11 +20,14 @@ const contactSchema = new mongoose.Schema(
     },
     contactType: {
       type: String,
-      enum: ['Work', 'Home', 'Personal'],
+      enum: ['work', 'home', 'personal'],
       required: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
 export const contactModel = mongoose.model('Contact', contactSchema);
