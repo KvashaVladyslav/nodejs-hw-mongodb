@@ -11,11 +11,11 @@ export function checkRoles(...roles) {
     }
 
     const { role } = user;
-    if (roles.includes(ROLES.CONTACT) && role === ROLES.CONTACT) {
+    if (roles.includes(ROLES.USER) && role === ROLES.USER) {
       next();
       return;
     }
-    if (roles.includes(ROLES.USER) && role === ROLES.USER) {
+    if (roles.includes(ROLES.CONTACT) && role === ROLES.CONTACT) {
       const { contactsId } = req.params;
       if (!contactsId) {
         next(createHttpError(403));
