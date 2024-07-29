@@ -50,6 +50,7 @@ export async function createContact(req, res, next) {
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
+    userId: req.body.userId,
   };
 
   const newContact = await ContactsService.createNewContact(contact);
@@ -77,6 +78,7 @@ export async function updateContact(req, res, next) {
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
+    userId: req.body.userId,
   };
   const updated = await ContactsService.updateOldContact(contactsId, contact);
   if (updated === null) {
