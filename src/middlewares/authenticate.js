@@ -33,7 +33,7 @@ export async function authenticate(req, res, next) {
 
   const user = await userModel.findById(session.userId);
   if (!user) {
-    next(createHttpError(401));
+    next(createHttpError(401, 'Session not found'));
     return;
   }
 

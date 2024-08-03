@@ -38,7 +38,6 @@ export const postContactsValidationSchema = Joi.object({
       'string.min': 'contactType should be at least {#limit}',
       'string.max': 'contactType should be at most {#limit}',
     }),
-  userId: Joi.string().required(),
 });
 
 export const patchContactsValidationSchema = Joi.object({
@@ -74,5 +73,4 @@ export const patchContactsValidationSchema = Joi.object({
       'string.min': 'contactType should be at least {#limit}',
       'string.max': 'contactType should be at most {#limit}',
     }),
-  userId: Joi.string(),
 });

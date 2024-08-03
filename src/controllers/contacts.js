@@ -16,6 +16,7 @@ export async function getContacts(req, res, next) {
     sortBy,
     sortOrder,
     filter,
+    userId: req.user._id,
   });
   if (contacts.length === 0) {
     return next(createHttpError(404, 'Contacts not found'));
@@ -32,7 +33,10 @@ export async function getContacts(req, res, next) {
 
 export async function getContactById(req, res, next) {
   const { contactsId } = req.params;
-  const getContactById = await ContactsService.getOneContactById(contactsId);
+  const getContactById = await ContactsService.getOneContactById(
+    contactsId,
+    req.user._id,
+  );
   if (getContactById === null) {
     return next(createHttpError(404, 'Contact not found!'));
   }
@@ -50,7 +54,7 @@ export async function createContact(req, res, next) {
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
-    userId: req.body.userId,
+    userId: req.user._id,
   };
 
   const newContact = await ContactsService.createNewContact(contact);
@@ -63,7 +67,10 @@ export async function createContact(req, res, next) {
 
 export async function deleteContact(req, res, next) {
   const { contactsId } = req.params;
-  const deleted = await ContactsService.deleteOldContact(contactsId);
+  const deleted = await ContactsService.deleteOldContact(
+    contactsId,
+    req.user._id,
+  );
   if (deleted === null) {
     return next(createHttpError(404, 'Contact not found!'));
   }
@@ -72,15 +79,20 @@ export async function deleteContact(req, res, next) {
 
 export async function updateContact(req, res, next) {
   const { contactsId } = req.params;
+  console.log(req.user._id);
   const contact = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
-    userId: req.body.userId,
   };
-  const updated = await ContactsService.updateOldContact(contactsId, contact);
+  const updated = await ContactsService.updateOldContact(
+    contactsId,
+    contact,
+    req.user._id,
+  );
+  console.log(updated);
   if (updated === null) {
     return next(createHttpError(404, 'Contact not found!'));
   }

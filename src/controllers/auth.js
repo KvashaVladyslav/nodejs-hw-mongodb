@@ -11,7 +11,6 @@ export async function registerUser(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    role: req.body.role,
   };
 
   const newUser = await registerNewUser(user);
