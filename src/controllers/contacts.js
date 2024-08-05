@@ -18,12 +18,6 @@ export async function getContacts(req, res, next) {
     filter,
     userId: req.user._id,
   });
-  if (contacts.length === 0) {
-    return next(createHttpError(404, 'Contacts not found'));
-  }
-  if (page > contacts.totalPages) {
-    return next(createHttpError(404, 'Page not found'));
-  }
   res.status(200).send({
     status: 200,
     message: 'Successfully found contacts!',
