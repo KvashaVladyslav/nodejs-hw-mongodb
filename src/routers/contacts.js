@@ -13,25 +13,28 @@ import {
 } from '../validations/contacts.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
 const jsonParser = express.json();
 
-router.get('/contacts', ctrlWrapper(getContacts));
+router.use(authenticate);
 
-router.get('/contacts/:contactsId', isValidId, ctrlWrapper(getContactById));
+router.get('/', ctrlWrapper(getContacts));
+
+router.get('/:contactsId', isValidId, ctrlWrapper(getContactById));
 
 router.post(
-  '/contacts',
+  '/',
   jsonParser,
   validateBody(postContactsValidationSchema),
   ctrlWrapper(createContact),
 );
 
-router.delete('/contacts/:contactsId', isValidId, ctrlWrapper(deleteContact));
+router.delete('/:contactsId', isValidId, ctrlWrapper(deleteContact));
 
 router.patch(
-  '/contacts/:contactsId',
+  '/:contactsId',
   isValidId,
   jsonParser,
   validateBody(patchContactsValidationSchema),
