@@ -1,7 +1,10 @@
+import createHttpError from 'http-errors';
 import { THIRTY_DAYS } from '../constants/constants.js';
 import {
   refreshUserSession,
   registerNewUser,
+  resetEmail,
+  resetPassword,
   userLogin,
   userLogOut,
 } from '../services/auth.js';
@@ -74,5 +77,32 @@ export async function refreshUser(req, res, next) {
     status: 200,
     message: 'Successfully refreshed a session!',
     data: { accessToken: session.accessToken },
+  });
+}
+
+export async function sendResetEmail(req, res, next) {
+  await resetEmail(req.body.email);
+  res.send({
+    status: 200,
+    message: 'Reset password email has been successfully sent',
+    data: {},
+  });
+  next(
+    createHttpError({
+      status: 500,
+      message: 'Failed to send the email please try again later.',
+    }),
+  );
+}
+
+export async function sendPassword(req, res, next) {
+  const { password, token } = req.body;
+
+  await resetPassword(password, token);
+
+  res.send({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
   });
 }
