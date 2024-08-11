@@ -14,7 +14,6 @@ import { sessionModel } from '../models/session.js';
 import { sendMail } from '../utils/sendMail.js';
 import path from 'path';
 import fs from 'node:fs/promises';
-import { error } from 'console';
 
 export async function registerNewUser(payload) {
   const user = await userModel.findOne({ email: payload.email });
@@ -154,6 +153,4 @@ export async function resetPassword(password, token) {
     }
     throw error;
   }
-
-  console.log(error);
 }
