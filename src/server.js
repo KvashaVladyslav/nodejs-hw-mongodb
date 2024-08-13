@@ -6,6 +6,7 @@ import router from './routers/index.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
+import { UPLOAD_DIR } from './constants/constants.js';
 
 export default async function setupServer() {
   const app = express();
@@ -14,6 +15,7 @@ export default async function setupServer() {
   app.use(cookieParser());
   app.use(pino());
   app.use(router);
+  app.use('/uploads', express.static(UPLOAD_DIR));
   app.use(notFoundHandler);
   app.use(errorHandler);
 

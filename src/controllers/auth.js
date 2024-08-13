@@ -1,12 +1,15 @@
+import createHttpError from 'http-errors';
 import { THIRTY_DAYS } from '../constants/constants.js';
 import {
   refreshUserSession,
   registerNewUser,
+  resetEmail,
+  resetPassword,
   userLogin,
   userLogOut,
 } from '../services/auth.js';
 
-export async function registerUser(req, res, next) {
+export async function registerUser(req, res) {
   const user = {
     name: req.body.name,
     email: req.body.email,
@@ -14,7 +17,6 @@ export async function registerUser(req, res, next) {
   };
 
   const newUser = await registerNewUser(user);
-  console.log(newUser);
   res.status(201).send({
     status: 201,
     message: 'Successfully registered a user!',
@@ -22,7 +24,7 @@ export async function registerUser(req, res, next) {
   });
 }
 
-export async function loginUser(req, res, next) {
+export async function loginUser(req, res) {
   const session = await userLogin(req.body);
 
   res.cookie('refreshToken', session.refreshToken, {
@@ -43,7 +45,7 @@ export async function loginUser(req, res, next) {
   });
 }
 
-export async function logOutUser(req, res, next) {
+export async function logOutUser(req, res) {
   if (req.cookies.sessionId) {
     await userLogOut(req.cookies.sessionId);
   }
@@ -64,7 +66,7 @@ function setupSession(res, session) {
   });
 }
 
-export async function refreshUser(req, res, next) {
+export async function refreshUser(req, res) {
   const session = await refreshUserSession({
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
@@ -74,5 +76,31 @@ export async function refreshUser(req, res, next) {
     status: 200,
     message: 'Successfully refreshed a session!',
     data: { accessToken: session.accessToken },
+  });
+}
+
+export async function sendResetEmail(req, res, next) {
+  await resetEmail(req.body.email);
+  if (resetEmail) {
+    res.send({
+      status: 200,
+      message: 'Reset password email has been successfully sent',
+      data: {},
+    });
+  } else {
+    next(
+      createHttpError(500, 'Failed to send the email, please try again later.'),
+    );
+  }
+}
+
+export async function sendPassword(req, res) {
+  const { password, token } = req.body;
+
+  await resetPassword(password, token);
+  res.send({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
   });
 }
