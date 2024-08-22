@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import { THIRTY_DAYS } from '../constants/constants.js';
 import {
+  loginOrRegisterWithGoogle,
   refreshUserSession,
   registerNewUser,
   resetEmail,
@@ -8,6 +9,9 @@ import {
   userLogin,
   userLogOut,
 } from '../services/auth.js';
+
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
+import { sessionModel } from '../models/session.js';
 
 export async function registerUser(req, res) {
   const user = {
@@ -102,5 +106,36 @@ export async function sendPassword(req, res) {
     status: 200,
     message: 'Password has been successfully reset.',
     data: {},
+  });
+}
+
+export async function getOAuthUrl(req, res, next) {
+  const url = generateAuthUrl();
+
+  res.send({
+    status: 200,
+    message: 'Successfully get Google OAuth Url',
+    data: { url },
+  });
+}
+
+export async function loginWithGoogle(req, res, next) {
+  const { code } = req.body;
+  const session = await loginOrRegisterWithGoogle(code);
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: new Date(Date.now() + THIRTY_DAYS),
+  });
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: new Date(Date.now() + THIRTY_DAYS),
+  });
+
+  res.status(200).send({
+    status: 200,
+    message: 'Successfully logged in with Google!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 }
