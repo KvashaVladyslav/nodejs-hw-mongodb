@@ -29,5 +29,7 @@ responses:
                 {
                   'url': 'https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&response_type=code&client_id=293764246118-h7e4kou7t55m9ago77l2nr6b898uaa26.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3000',
                 }
+  '401':
+    $ref: ../../components/responses/401.yaml
   '500':
     $ref: ../../components/responses/500.yaml
