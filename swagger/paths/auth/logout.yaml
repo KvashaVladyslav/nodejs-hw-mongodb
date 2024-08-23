@@ -1,0 +1,31 @@
+tags:
+  - auth
+summary: Logout user
+operationId: logoutUser
+description: 'Logout user'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - refreshToken
+          - sessionId
+        properties:
+          refreshToken:
+            description: session refresh token
+            type: string
+            example: HX7PO37g0qH1Gwaq3ZVPx0TAXx1E9M/qZD3kekJW
+          sessionId:
+            description: session access token
+            type: string
+            example: xKpUH4xLDzVC7QZUBclTUDcc24My+urpPl2ulpla
+responses:
+  '204':
+    description: ''
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

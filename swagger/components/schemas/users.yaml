@@ -1,0 +1,32 @@
+type: object
+required:
+  - name
+  - email
+  - password
+properties:
+  _id:
+    description: 'User Id'
+    type: string
+    example: 66a55a8fd8c57d3e7b64de33
+  name:
+    description: 'User name'
+    type: string
+    example: 'Test Name'
+  email:
+    description: 'User email'
+    type: string
+    example: 'testName@email.com'
+  password:
+    description: 'User email password'
+    type: string
+    example: sdgds24SdSY11
+  createdAt:
+    description: 'Date of creating'
+    type: string
+    format: Date
+    example: '2024-08-23T14:55:09.950Z'
+  updatedAt:
+    description: 'Date of cupdating'
+    type: string
+    format: Date
+    example: '2024-08-23T14:55:09.950Z'

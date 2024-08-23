@@ -1,0 +1,45 @@
+tags:
+  - auth
+summary: Confirm oauth
+operationId: confirmOAuth
+description: confirm oauth
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: code from google oauth url
+            type: string
+            example: '4%2F0AQlEd8y_s87y0CED6sqTXToYBsawkrEYQFKWPtzyqIp9oYY0U17LxEF8e3EpS1DtHRONDA'
+responses:
+  '200':
+    description: Successfully logged in with Google!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully logged in with Google!
+            data:
+              type: object
+              example:
+                { 'accessToken': 'yxzZrW+yYq+fbXL8Co5jq1h2yW4cKYdJJCEBSGzM' }
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

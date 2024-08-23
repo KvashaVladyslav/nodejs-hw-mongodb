@@ -1,0 +1,73 @@
+tags:
+  - contacts
+summary: Create contact
+operationId: createContact
+description: 'Create a new contact'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - contactType
+        properties:
+          name:
+            description: contacts name
+            type: string
+            example: Vlad Example
+          phoneNumber:
+            description: 'contacts phone number, starts with + and includes only numbers'
+            type: string
+            example: '+380002002002'
+          email:
+            description: contacts email
+            type: string
+            example: 'example@mail.com'
+          isFavourite:
+            description: is this contact favourite or not
+            type: boolean
+            example: true
+            default: false
+          contactType:
+            description: type of contact
+            type: string
+            enum: ['work', 'home', 'personal']
+            example: work
+          photo:
+            description: 'contacts photo'
+            type: string
+            format: binary
+            example: https://res.cloudinary.com/dyfmga5cd/image/upload/v1723409623/rdhl4c5cgpipyzmgj6up.jpg
+responses:
+  '201':
+    description: 'Successfully created a contact!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created a contact!'
+            data:
+              type: object
+              $ref: ../../components/schemas/contacts.yaml
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

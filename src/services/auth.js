@@ -84,6 +84,7 @@ export async function refreshUserSession({ sessionId, refreshToken }) {
   }
 
   const newSession = createSession();
+
   await sessionModel.deleteOne({ _id: sessionId, refreshToken });
   console.log(newSession);
   return await sessionModel.create({
@@ -131,7 +132,6 @@ export async function resetEmail(email) {
 export async function resetPassword(password, token) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
 
     const user = await userModel.findOne({
       _id: decoded.sub,

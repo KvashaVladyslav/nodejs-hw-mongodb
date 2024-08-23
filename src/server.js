@@ -7,9 +7,12 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
 import { UPLOAD_DIR } from './constants/constants.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 export default async function setupServer() {
   const app = express();
+
+  app.use('/api-docs', swaggerDocs());
 
   app.use(cors());
   app.use(cookieParser());

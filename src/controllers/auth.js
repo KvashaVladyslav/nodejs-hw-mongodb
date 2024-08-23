@@ -11,7 +11,6 @@ import {
 } from '../services/auth.js';
 
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
-import { sessionModel } from '../models/session.js';
 
 export async function registerUser(req, res) {
   const user = {
